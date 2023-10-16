@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { Server } from "socket.io";
 import { UserModel } from "../models/UserSchema.js";
 
@@ -23,7 +25,6 @@ export default (server) => {
     socket.on("DIALOG:JOIN", (dialogId) => {
       socket.dialogId = dialogId;
       socket.join(dialogId);
-      console.log(dialogId);
     });
 
     socket.on("CLIENT:ONLINE", async (data) => {

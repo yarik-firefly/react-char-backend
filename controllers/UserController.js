@@ -1,6 +1,9 @@
 import { UserModel } from "../models/UserSchema.js";
+import dotenv from "dotenv";
+dotenv.config();
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "../utils/sendEmail.js";
 
 class UserController {
   constructor(io) {
@@ -69,6 +72,15 @@ class UserController {
       };
 
       const user = await UserModel.create(userData);
+
+      sendEmail({
+        emailFrom: process.env.MY_MAIL,
+        emailTo: userData.email,
+        subject: "😎Подтверждение Почты Для Офигенного React-Chat 😎",
+        html: `Для того, чтобы подтвердить почту, перейдите на <a href='${
+          process.env.REACT_APP_VERIFY_URL || "http://localhost:4444"
+        }user/verify?hash=${userData.confirm_hash}'>по этой ссылке</a>`,
+      });
 
       const { password: passwordHash, ...data } = user._doc;
 
