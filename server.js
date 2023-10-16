@@ -40,6 +40,8 @@ mongoose
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+const PORT = process.env.PORT || 4444;
+
 app.use(cors());
 app.use(express.json());
 // app.use(checkAuth);
@@ -69,6 +71,6 @@ app.delete("/messages", checkAuth, MessageController.delete);
 app.post("/files", checkAuth, upload.single("file"), UploadControler.create);
 // app.delete("/files", checkAuth, UploadControler.delete);
 
-server.listen(process.env.PORT || 4444, () => {
+server.listen(PORT, () => {
   console.log("Server Start!");
 });
