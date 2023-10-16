@@ -22,6 +22,12 @@ const app = express();
 const server = createServer(app);
 const io = socket(server);
 
+app.use(cors());
+app.use(express.json());
+// app.use(checkAuth);
+app.use(UpdateSeen);
+app.use(validatorErrors);
+
 const UserController = new UserCtrl(io);
 const DialogsController = new DialogsCtrl(io);
 const MessageController = new MessageCtrl(io);
@@ -41,12 +47,6 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const PORT = process.env.PORT || 4444;
-
-app.use(cors());
-app.use(express.json());
-// app.use(checkAuth);
-app.use(UpdateSeen);
-app.use(validatorErrors);
 
 app.get("/", (req, res) => {
   res.send("Hello Nigga :)");
