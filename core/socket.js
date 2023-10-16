@@ -4,7 +4,7 @@ import { UserModel } from "../models/UserSchema.js";
 export default (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: process.env.CLIENT_PART || "http://localhost:3000",
       methods: ["GET", "POST"],
       credential: true,
     },

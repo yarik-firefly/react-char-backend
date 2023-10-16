@@ -28,15 +28,9 @@ const MessageController = new MessageCtrl(io);
 
 const UploadControler = new UploadController();
 
-mongoose
-  .connect(
-    `mongodb+srv://Yaroslav:${
-      "Yarik2002++" || process.env.PASSWORD
-    }@cluster0.nggdfdb.mongodb.net/?retryWrites=true&w=majority`
-  )
-  .then(() => {
-    console.log("DB connect!");
-  });
+mongoose.connect(process.env.MONGO_DB).then(() => {
+  console.log("DB connect!");
+});
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -70,6 +64,6 @@ app.delete("/messages", checkAuth, MessageController.delete);
 app.post("/files", checkAuth, upload.single("file"), UploadControler.create);
 // app.delete("/files", checkAuth, UploadControler.delete);
 
-server.listen(4444, () => {
+server.listen(process.env.PORT || 4444, () => {
   console.log("Server Start!");
 });
