@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export const createToken = (req, res, next) => {
   bcrypt.genSalt(10, (err, salt) => {
