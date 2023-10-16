@@ -28,9 +28,14 @@ const MessageController = new MessageCtrl(io);
 
 const UploadControler = new UploadController();
 
-mongoose.connect(process.env.MONGO_DB).then(() => {
-  console.log("DB connect!");
-});
+mongoose
+  .connect(process.env.MONGO_DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("DB connect!");
+  });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
