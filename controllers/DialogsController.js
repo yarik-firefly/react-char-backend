@@ -45,7 +45,7 @@ class DialogsController {
         if (dialog) {
           const message = {
             text: req.body.text,
-            user: req.body.author,
+            user: data.author,
             dialog: dialog._id,
           };
 

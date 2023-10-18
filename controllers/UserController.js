@@ -159,14 +159,15 @@ class UserController {
     }
 
     const me = await UserModel.findById(userId);
+    if (me) {
+      const { password, ...userData } = me._doc;
+      console.log(userData.last_seen);
 
-    const { password, ...userData } = me._doc;
-    console.log(userData.last_seen);
-
-    res.status(200).json({
-      status: "success",
-      data: userData,
-    });
+      res.status(200).json({
+        status: "success",
+        data: userData,
+      });
+    }
   };
 
   verify = async (req, res) => {
