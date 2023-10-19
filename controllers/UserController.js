@@ -120,30 +120,36 @@ class UserController {
         });
       }
 
-      const isValidPass = await bcrypt.compare(
-        req.body.password + process.env.SECRET_KEY,
-        user.password
-      );
+      if (!!user.confirmed) {
+        const isValidPass = await bcrypt.compare(
+          req.body.password + process.env.SECRET_KEY,
+          user.password
+        );
 
-      if (!isValidPass) {
-        return res.status(404).json({
-          status: "error",
-          message: "Неверный логин или пароль!",
+        if (!isValidPass) {
+          return res.status(404).json({
+            status: "error",
+            message: "Неверный логин или пароль!",
+          });
+        }
+
+        const token = jwt.sign(
+          {
+            _id: user._id,
+          },
+          process.env.SECRET_KEY,
+          {
+            expiresIn: "30d",
+          }
+        );
+
+        const { password, ...userData } = user._doc;
+        res.json({ ...userData, token });
+      } else {
+        res.json({
+          message: "Аккаунт не подтвержден",
         });
       }
-
-      const token = jwt.sign(
-        {
-          _id: user._id,
-        },
-        process.env.SECRET_KEY,
-        {
-          expiresIn: "30d",
-        }
-      );
-
-      const { password, ...userData } = user._doc;
-      res.json({ ...userData, token });
     } catch (error) {
       console.log(error);
     }

@@ -57,7 +57,7 @@ class MessageController {
 
       res.status(200).json({
         status: "success",
-        data: await message.populate(["dialog", "attachments"]),
+        data: await message.populate(["dialog", "attachments", "user"]),
       });
 
       return this.io.emit("SERVER:NEW_MESSAGE", message);
