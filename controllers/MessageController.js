@@ -12,6 +12,12 @@ class MessageController {
 
     const dialog = await MessageModel.find({ dialog: dialogId })
       .populate(["dialog", "attachments"])
+      .populate({
+        path: "user",
+        populate: {
+          path: "avatar",
+        },
+      })
       .exec();
 
     await MessageModel.updateMany(

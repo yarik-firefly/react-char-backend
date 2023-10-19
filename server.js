@@ -32,7 +32,7 @@ const UserController = new UserCtrl(io);
 const DialogsController = new DialogsCtrl(io);
 const MessageController = new MessageCtrl(io);
 
-const UploadControler = new UploadController();
+const UploadControler = new UploadController(io);
 
 mongoose
   .connect(process.env.MONGO_DB, {
@@ -69,6 +69,13 @@ app.post("/messages", checkAuth, MessageController.create);
 app.delete("/messages", checkAuth, MessageController.delete);
 
 app.post("/files", checkAuth, upload.single("file"), UploadControler.create);
+app.post(
+  "/avatar",
+  checkAuth,
+  upload.single("file"),
+  UploadControler.uploadAvatar
+);
+
 // app.delete("/files", checkAuth, UploadControler.delete);
 
 server.listen(PORT, () => {
