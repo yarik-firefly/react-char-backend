@@ -28,18 +28,24 @@ export default (server) => {
     });
 
     socket.on("CLIENT:ONLINE", async (data) => {
-      onlineUsers[socket._id] = data.userId;
-      const doc = await UserModel.findOneAndUpdate(
-        {
-          _id: data.userId,
-        },
-        { isOnline: true },
-        { upsert: true }
-      );
+      try {
+        if (!isValidObjectId(data.userId)) {
+          return console.log("ID не валиден");
+        }
+        const doc = await UserModel.findOneAndUpdate(
+          {
+            _id: data.userId,
+          },
+          { isOnline: true },
+          { upsert: true }
+        );
 
-      console.log("ONLINE");
+        console.log("ONLINE");
 
-      socket.emit("CLIENT:ONLINE", "Online");
+        socket.emit("CLIENT:ONLINE", "Online");
+      } catch (error) {
+        console.log(error);
+      }
     });
 
     socket.on("disconnect", () => {
